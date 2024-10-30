@@ -1,0 +1,60 @@
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.loader {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.circle {
+  width: 16px;
+  height: 16px;
+  background-color: #28a745;
+  border-radius: 50%;
+  position: absolute;
+  animation: circleBounce 1.2s infinite ease-in-out;
+}
+
+.circle:nth-child(1) {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: -0.4s;
+}
+
+.circle:nth-child(2) {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  animation-delay: -0.3s;
+}
+
+.circle:nth-child(3) {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: -0.2s;
+}
+
+.circle:nth-child(4) {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  animation-delay: -0.1s;
+}
+
+@keyframes circleBounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+}
