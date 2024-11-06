@@ -1,0 +1,4 @@
+# Exclude source files
+src/
+*.config.*
+*.log

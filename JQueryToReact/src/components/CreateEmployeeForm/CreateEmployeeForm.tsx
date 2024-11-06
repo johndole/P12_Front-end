@@ -1,3 +1,5 @@
+// src/components/EmployeeForm.tsx
+
 import React, { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -9,11 +11,14 @@ import { useGlobalState } from "../../store/globalStoreContext"
 import { useNavigate } from "react-router-dom"
 import Select from "react-select"
 import states from "states-us"
+import { Modal } from "@meruem-senpai/react-modal-openclassroom" // Ensure correct package name
+import "@meruem-senpai/react-modal-openclassroom/dist/index.css"
 
 const EmployeeForm: React.FC = () => {
   const { dispatch } = useGlobalState()
   const [isProcessing, setIsProcessing] = useState(false)
   const navigate = useNavigate()
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Dropdown options
   const stateOptions = states.map((state) => ({
@@ -50,9 +55,6 @@ const EmployeeForm: React.FC = () => {
     },
   })
 
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
-
-  // Manually register state and department fields
   useEffect(() => {
     register("state", { required: "State is required" })
     register("department", { required: "Department is required" })
@@ -70,18 +72,22 @@ const EmployeeForm: React.FC = () => {
     dispatch({ type: "add_employee", payload: employeeData })
 
     console.log("Employee data submitted:", employeeData)
-    setSuccessMessage("Employee added successfully!")
 
-    // Navigate after 1.5 seconds
-    setTimeout(() => {
-      navigate("/employee-list")
-    }, 1500)
+    setIsModalOpen(true) // Open the success modal
 
-    setIsProcessing(false)
+    // Reset form fields after submission
     reset({
       state: defaultStateValue,
       department: defaultDepartmentValue,
     })
+
+    setIsProcessing(false)
+  }
+
+  // Handle closing the modal and navigating to the employee list
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    navigate("/employee-list")
   }
 
   return (
@@ -92,14 +98,6 @@ const EmployeeForm: React.FC = () => {
         className="logo"
       />
       <h2 className="form-title">Create Employee</h2>
-      {successMessage && (
-        <div
-          className="success-message"
-          role="alert"
-        >
-          {successMessage}
-        </div>
-      )}
       <button
         className="employee-list-button"
         onClick={() => navigate("/employee-list")}
@@ -403,6 +401,16 @@ const EmployeeForm: React.FC = () => {
           {isProcessing ? "Creating employee..." : "Add Employee"}
         </button>
       </form>
+
+      {/* Success Modal Integration */}
+      <Modal
+        isOpen={isModalOpen}
+        title="Success"
+        message="Employee added successfully!"
+        onClose={handleCloseModal}
+        duration={3000} // Auto-close after 3 seconds
+        showCloseButton={true}
+      />
     </div>
   )
 }
